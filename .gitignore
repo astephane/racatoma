@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+# Linux
+*~
+
+# GNU global files.
+GPATH
+GRTAGS
+GTAGS
