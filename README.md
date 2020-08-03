@@ -1,4 +1,4 @@
-RAting CAlculator & TOurnament MAnager
+# Rating Calculator & Tournament Manager
 
 `racatoma` stands for _Rating Calculator & Tournament Monager_. It provides an ELO, Glicko and Glicko-2 rating calculator alongside with ladder, swiss and round-robin tournaments management.
 
