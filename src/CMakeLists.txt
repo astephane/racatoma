@@ -19,6 +19,7 @@
 
 set( SOURCES
   main.cpp
+  template.cpp
   )
 
 add_executable( ${PROJECT_NAME} ${SOURCES} )
