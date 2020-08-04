@@ -18,6 +18,7 @@
 
 
 set( SOURCES
+  dummy.cpp
   main.cpp
   template.cpp
   )
