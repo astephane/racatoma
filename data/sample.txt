@@ -1,0 +1,17 @@
+#
+# PID	Rating	Name
+FLE	1000	First Name, Last Name
+FPR	1001	First, Player
+SPR	1002	Second, Player
+TPR	1003	Third, Player
+
+#
+# Matches
+2020-08-01	15'+10"	FPR-SPR	+1
+2020-08-02	5'+3"		SPR-TPR	-1
+2020-08-03	25'+10"	TPR-FPR	0.5
+2020-08-04	15'+10"	SPR-FPR	1
+#
+# Erroneous
+2020-08-05	0'+0'	SPR-TPR	+0.5
+2020-08-06	0'+0"	TPR-FPR	+1
