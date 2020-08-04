@@ -65,3 +65,38 @@ usage( char * argv0 )
 
   return EXIT_FAILURE;
 }
+
+enum class rating
+{
+  elo,
+  glicko,
+  glicko2,
+};
+
+
+template< typename Enum, typename T >
+struct pod
+{
+  using value_type = Data;
+
+  template< Enum e >
+  auto get() const noexcept
+  {
+  }
+
+  value_type data;
+};
+
+
+enum class player
+{
+  id,
+  rating,
+  name,
+};
+
+using player_id = std::string;
+using player_rating = std::tuple< double, double, double >;
+using player_name = std::string;
+
+using player = std::tuple< std::string id, double,
