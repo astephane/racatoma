@@ -16,14 +16,52 @@
 // <https://www.gnu.org/licenses/>.
 //
 
+#include <cassert>
 #include <cstdlib>
+#include <filesystem>
+#include <iostream>
+
+
+#include "config.hpp"
 
 
 #define unused( x )
 
 
+std::string basename( char const * );
+int usage( char * argv0 );
+
+
 int
-main( int unused( argc ), char * unused( argv )[] )
+main( int argc, char * argv[] )
 {
+  if( argc != 2 )
+    return usage( argv[ 0 ] );
+
   return EXIT_SUCCESS;
+}
+
+
+std::string
+basename( char const * pathname )
+{
+  assert( pathname );
+
+  std::filesystem::path p( pathname );
+
+  assert( !p.empty() );
+
+  return p.filename();
+}
+
+
+int
+usage( char * argv0 )
+{
+  std::cout << "Usage: " << basename( argv0 ) << " <filename>"
+	    << std::endl;
+
+  std::cout << "  <filename> Players and matches database" << std::endl;
+
+  return EXIT_FAILURE;
 }
