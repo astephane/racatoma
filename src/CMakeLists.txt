@@ -26,7 +26,11 @@ add_executable( ${PROJECT_NAME} ${SOURCES} )
 message( "CMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR}" )
 
 target_include_directories( ${PROJECT_NAME}
-  PUBLIC ${CMAKE_SOURCE_DIR}/src )
+  PUBLIC ${CMAKE_SOURCE_DIR}/src
+  PUBLIC ${CMAKE_BINARY_DIR}
+  )
+
+target_link_libraries( ${PROJECT_NAME} -lstdc++fs )
 
 # target_include_directories( ${PROJECT_NAME}
 #   PUBLIC ${PROJECT_BINARY_DIR}/src
