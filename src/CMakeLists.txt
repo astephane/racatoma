@@ -18,10 +18,11 @@
 
 
 set( SOURCES
-  dummy.cpp
-  main.cpp
-  template.cpp
-  )
+	dummy.cpp
+	lambda.cpp
+	main.cpp
+	template.cpp
+	)
 
 add_executable( ${PROJECT_NAME} ${SOURCES} )
 
