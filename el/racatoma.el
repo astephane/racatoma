@@ -23,21 +23,22 @@
   "Parse current buffer"
   (with-current-buffer buffer
     (beginning-of-buffer)
-    (while (eobp)
-      (beginning-of-line)
-      (let ((start (line-beginning-position))
-	    (stop (line-end-position))
-	    (line (buffer-substring start stop)))
-	(print start)
-	(print stop)
-	(edebug-tracing "start: " (print start))
-	(edebug-tracing "stop : " stop)
-	(edebug-tracing "line : " line)
-	)
-      (end-of-line)
+    (edebug-tracing "while"
+     (while (eobp)
+       (beginning-of-line)
+       (let ((start (line-beginning-position))
+	     (stop (line-end-position))
+	     (line (buffer-substring start stop)))
+	 (edebug-trace "start: %d" start)
+	 (edebug-trace "stop : %d" stop)
+	 (edebug-trace "line : '%s'" line)
+	 )
+       (end-of-line)
       (forward-line 1)
       )
+     )
     )
+  "foo"
   )
 
 
@@ -46,7 +47,7 @@
 (defun racatoma ()
   "Rating Calculator & Tournament Manager"
   (interactive)
-  (parse-buffer (current-buffer))
+  (edebug-tracing "parse-buffer" (parse-buffer (current-buffer)))
   )
 
 
