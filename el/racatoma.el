@@ -16,6 +16,42 @@
 ;; <https://www.gnu.org/licenses/>.
 ;;
 
-(defun racatoma ()
-  (interactive)
+
+;;
+;;
+(defun parse-buffer (buffer)
+  "Parse current buffer"
+  (with-current-buffer buffer
+    (beginning-of-buffer)
+    (while (eobp)
+      (beginning-of-line)
+      (let ((start (line-beginning-position))
+	    (stop (line-end-position))
+	    (line (buffer-substring start stop)))
+	(print start)
+	(print stop)
+	(edebug-tracing "start: " (print start))
+	(edebug-tracing "stop : " stop)
+	(edebug-tracing "line : " line)
+	)
+      (end-of-line)
+      (forward-line 1)
+      )
+    )
   )
+
+
+;;
+;;
+(defun racatoma ()
+  "Rating Calculator & Tournament Manager"
+  (interactive)
+  (parse-buffer (current-buffer))
+  )
+
+
+;;
+;; Debug stuff
+;; (edebug-tracing "tracing: " 'racatoma)
+
+;; (edebug-trace "test: " float-pi)
