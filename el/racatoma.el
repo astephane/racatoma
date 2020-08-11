@@ -31,27 +31,17 @@
   (with-current-buffer buffer
     (beginning-of-buffer)
     (let ((count 0))
-      (edebug-tracing
-       "while"
-       (while (not (eobp))
-         (beginning-of-line)
-         (edebug-tracing
-          "let"
-          (let ((start (line-beginning-position))
-                (stop (line-end-position))
-                (line (buffer-substring start stop)))
-            (edebug-tracing "start" start)
-            (edebug-tracing "stop" stop)
-            (edebug-tracing "line" line)
-            (parse-line line)
-            (setq count (1+ count))
-            (edebug-tracing count)
-            )
+      (while (not (eobp))
+        (beginning-of-line)
+        (let* ((start (line-beginning-position))
+               (stop (line-end-position))
+               (line (buffer-substring start stop)))
+          (parse-line line)
+          (setq count (1+ count))
           )
-         (end-of-line)
-         (forward-line 1)
-         )
-       )
+        (end-of-line)
+        (forward-line 1)
+        )
       count
       )
     )
@@ -65,7 +55,8 @@
   (interactive)
   (edebug-tracing
    "parse-buffer"
-   (parse-buffer (current-buffer)))
+   (parse-buffer (current-buffer))
+   )
   )
 
 
