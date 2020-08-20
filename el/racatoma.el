@@ -19,13 +19,17 @@
 
 ;;
 ;;
-(defun parse-players (line)
+(defun parse-players (columns)
+  nil
   )
+
 
 ;;
 ;;
-(defun parse-matches (lie)
+(defun parse-matches (columns)
+  nil
   )
+
 
 ;;
 ;;
@@ -35,13 +39,15 @@
 
 ;;
 ;;
-(defun players-section-p ()
+(defun players-section-p (section)
+  nil
   )
 
 
 ;;
 ;;
-(defun matches-section-p ()
+(defun matches-section-p (section)
+  nil
   )
 
 
@@ -49,10 +55,14 @@
 ;;
 (defun parse-line (start stop section)
   "Parse given line of current buffer."
-  (let line ((buffer-substring start stop))
-       (cond ((players-section-p section) (parse-players line))
-	     ((matches-section-p section) (parse-matches line)))
-       )
+  (let* ((line (buffer-substring start stop))
+         (columns (split-string line "\t")))
+    (edebug-tracing "line: " line)
+    (edebug-tracing "columns: " columns)
+    (cond ((players-section-p section) (parse-players line))
+          ((matches-section-p section) (parse-matches line))
+          (t (write-results)))
+    )
   )
 
 
@@ -67,14 +77,14 @@
         (beginning-of-line)
         (let* ((start (line-beginning-position))
                (stop (line-end-position))
-	       (section nil))
+               (section nil))
           (parse-line start stop section)
           (setq count (1+ count))
           )
         (end-of-line)
         (forward-line 1)
         )
-      count
+      (edebug-tracing "count: " count)
       )
     )
   )
