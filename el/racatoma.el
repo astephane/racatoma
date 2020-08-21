@@ -19,35 +19,121 @@
 
 ;;
 ;;
+(defun comment-string ()
+  "#"
+  )
+
+
+;;
+;;
+(defun players-section-string ()
+  "PLAYERS"
+  )
+
+
+;;
+;;
+(defun matches-section-string ()
+  "MATCHES"
+  )
+
+
+;;
+;;
+(defun results-section-string ()
+  "RESULTS"
+  )
+
+
+;;
+;;
+(defun players-section-symbol ()
+  'PLAYERS
+  )
+
+
+;;
+;;
+(defun matches-section-symbol ()
+  'MATCHES
+  )
+
+
+;;
+;;
+(defun results-section-symbol ()
+  'RESULTS
+  )
+
+
+;;
+;;
+(defun is-empty-p (list)
+  "Check if list is empty, considering comments."
+
+  (cl-assert (listp list))
+  (cl-assert (stringp (car list)))
+  (cl-assert (stringp (comment-string)))
+  (cl-assert (not (string= (comment-string) "")))
+
+  (or (null list)
+      (string-prefix-p (comment-string)
+		       (car list)))
+  )
+
+
+;;
+;;
 (defun parse-players (columns)
-  nil
+  ""
+
+  (cl-assert (listp columns))
+
+  (if (not (is-empty-p columns))
+      (edebug-tracing "players: " columns)
+    )
   )
 
 
 ;;
 ;;
 (defun parse-matches (columns)
-  nil
+  ""
+
+  (cl-assert( listp columns))
+
+  (if (not (is-empty-p columns))
+      (edebug-tracing "matches: " columns)
+    )
   )
 
 
 ;;
 ;;
 (defun write-results ()
+  ""
   )
 
 
 ;;
 ;;
-(defun players-section-p (section)
-  nil
+(defun is-players-section-p (section)
+  ""
+
+  (cl-assert (symbolp section))
+
+  (eq section (players-section-symbol))
   )
 
 
 ;;
 ;;
-(defun matches-section-p (section)
-  nil
+(defun is-matches-section-p (section)
+  ""
+
+  (cl-assert (symbolp section))
+
+  (eq section (matches-section-symbol))
   )
 
 
@@ -55,10 +141,15 @@
 ;;
 (defun parse-line (start stop section)
   "Parse given line of current buffer."
+
+  (cl-assert (integerp start))
+  (cl-assert (integerp stop))
+  (cl-assert (symbolp section))
+
   (let* ((line (buffer-substring start stop))
          (columns (split-string line "\t")))
-    (edebug-tracing "line: " line)
-    (edebug-tracing "columns: " columns)
+    ;; (edebug-tracing "line: " line)
+    ;; (edebug-tracing "columns: " columns)
     (cond ((players-section-p section) (parse-players line))
           ((matches-section-p section) (parse-matches line))
           (t (write-results)))
@@ -70,6 +161,7 @@
 ;;
 (defun parse-buffer (buffer)
   "Parse current buffer."
+
   (with-current-buffer buffer
     (beginning-of-buffer)
     (let ((count 0))
@@ -94,6 +186,7 @@
 ;;
 (defun racatoma ()
   "Rating Calculator & Tournament Manager"
+
   (interactive)
   (edebug-tracing
    "parse-buffer"
