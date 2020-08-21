@@ -88,10 +88,9 @@
   ""
 
   (cl-assert (listp columns))
+  (cl-assert (not (is-empty-p columns)))
 
-  (if (not (is-empty-p columns))
-      (edebug-tracing "players: " columns)
-    )
+  (edebug-tracing "players: " columns)
   )
 
 
@@ -101,10 +100,9 @@
   ""
 
   (cl-assert( listp columns))
+  (cl-assert (not (is-empty-p columns)))
 
-  (if (not (is-empty-p columns))
-      (edebug-tracing "matches: " columns)
-    )
+  (edebug-tracing "matches: " columns)
   )
 
 
@@ -150,9 +148,11 @@
          (columns (split-string line "\t")))
     ;; (edebug-tracing "line: " line)
     ;; (edebug-tracing "columns: " columns)
-    (cond ((players-section-p section) (parse-players line))
-          ((matches-section-p section) (parse-matches line))
-          (t (write-results)))
+    (if (not (is-empty-p line))
+	(cond ((players-section-p section) (parse-players line))
+              ((matches-section-p section) (parse-matches line))
+              (t (write-results)))
+      )
     )
   )
 
