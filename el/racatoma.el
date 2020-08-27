@@ -26,59 +26,81 @@
 
 ;;
 ;;
-(defun players-section-string ()
-  "PLAYERS"
+(defun players-section-string () "PLAYERS")
+
+
+;;
+;;
+(defun matches-section-string () "MATCHES")
+
+
+;;
+;;
+(defun results-section-string () "RESULTS")
+
+
+;;
+;;
+(defun players-section-symbol () 'PLAYERS)
+
+
+;;
+;;
+(defun matches-section-symbol () 'MATCHES)
+
+
+;;
+;;
+(defun results-section-symbol () 'RESULTS)
+
+
+;;
+;;
+(defun is-players-section-p (section)
+  ""
+
+  (edebug-tracing "p-section" section)
+
+  (cl-assert (or (null section)
+		 (symbolp section)))
+  (cl-assert (symbolp (players-section-symbol)))
+
+  (eq section (players-section-symbol))
   )
 
 
 ;;
 ;;
-(defun matches-section-string ()
-  "MATCHES"
+(defun is-matches-section-p (section)
+  ""
+
+  (edebug-tracing "m-section" section)
+
+  (cl-assert (or (null section)
+		 (symbolp section)))
+  (cl-assert (symbolp (matches-section-symbol)))
+
+  (eq section (matches-section-symbol))
   )
 
 
 ;;
 ;;
-(defun results-section-string ()
-  "RESULTS"
-  )
+(defun strip-comment (columns)
+  "Strip all content from sequence after comment separator."
 
-
-;;
-;;
-(defun players-section-symbol ()
-  'PLAYERS
-  )
-
-
-;;
-;;
-(defun matches-section-symbol ()
-  'MATCHES
-  )
-
-
-;;
-;;
-(defun results-section-symbol ()
-  'RESULTS
-  )
-
-
-;;
-;;
-(defun is-empty-p (list)
-  "Check if list is empty, considering comments."
-
-  (cl-assert (listp list))
-  (cl-assert (stringp (car list)))
+  (cl-assert (seqp columns))
   (cl-assert (stringp (comment-string)))
   (cl-assert (not (string= (comment-string) "")))
 
-  (or (null list)
-      (string-prefix-p (comment-string)
-		       (car list)))
+  (seq-take-while
+   (lambda (e)
+     (cl-assert (stringp e))
+
+     (not (string-prefix-p (comment-string) e))
+     )
+   columns
+   )
   )
 
 
@@ -88,9 +110,9 @@
   ""
 
   (cl-assert (listp columns))
-  (cl-assert (not (is-empty-p columns)))
+  (cl-assert (not (null columns)))
 
-  (edebug-tracing "players: " columns)
+  (edebug-tracing "players" columns)
   )
 
 
@@ -99,10 +121,10 @@
 (defun parse-matches (columns)
   ""
 
-  (cl-assert( listp columns))
-  (cl-assert (not (is-empty-p columns)))
+  (cl-assert (listp columns))
+  (cl-assert (not (null columns)))
 
-  (edebug-tracing "matches: " columns)
+  (edebug-tracing "matches" columns)
   )
 
 
@@ -115,43 +137,27 @@
 
 ;;
 ;;
-(defun is-players-section-p (section)
-  ""
-
-  (cl-assert (symbolp section))
-
-  (eq section (players-section-symbol))
-  )
-
-
-;;
-;;
-(defun is-matches-section-p (section)
-  ""
-
-  (cl-assert (symbolp section))
-
-  (eq section (matches-section-symbol))
-  )
-
-
-;;
-;;
 (defun parse-line (start stop section)
   "Parse given line of current buffer."
 
+  (edebug-tracing "section" section)
+
   (cl-assert (integerp start))
   (cl-assert (integerp stop))
-  (cl-assert (symbolp section))
+  (cl-assert (or (null section)
+		 (symbolp section)))
 
   (let* ((line (buffer-substring start stop))
-         (columns (split-string line "\t")))
-    ;; (edebug-tracing "line: " line)
-    ;; (edebug-tracing "columns: " columns)
-    (if (not (is-empty-p line))
-	(cond ((players-section-p section) (parse-players line))
-              ((matches-section-p section) (parse-matches line))
-              (t (write-results)))
+	 (columns (strip-comment (split-string line "\t"))))
+    ;; (edebug-tracing "line" line)
+    (edebug-tracing "columns" columns)
+    (if (not (null columns))
+	(cond ((is-players-section-p columns) (setq section
+						    (players-section-symbol)))
+	      ((is-matches-section-p columns) (setq section
+						    (matches-section-symbol)))
+	      ((players-section-p section) (parse-players columns))
+              ((matches-section-p section) (parse-matches columns)))
       )
     )
   )
@@ -176,7 +182,7 @@
         (end-of-line)
         (forward-line 1)
         )
-      (edebug-tracing "count: " count)
+      (edebug-tracing "count" count)
       )
     )
   )
